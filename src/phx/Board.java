@@ -9,20 +9,23 @@ import java.util.List;
 import javax.swing.JPanel;
 
 public class Board extends JPanel {
+    private static final long serialVersionUID = -1790261785521495991L;
     /* Board row and column */
     public static final int ROW = 4;
     /* Two array use for convenience iterate */
     public static final int[] _0123 = {0, 1, 2, 3};
     public static final int[] _3210 = {3, 2, 1, 0};
 
-    private static final long serialVersionUID = -1790261785521495991L;
-
     GUI2048 host;
+
     private Tile[] tiles;
+
     private static Value GOAL = Value._2048;
-    public void setGOAL(Value g) {
-        GOAL = g;
+
+    public void setGOAL(int num) {
+        GOAL = Value.of(num);
     }
+
     public Board(GUI2048 f) {
         host = f;
         setFocusable(true);
@@ -37,13 +40,15 @@ public class Board extends JPanel {
         addTile();
         addTile();
     }
-    /*
+
+    /**
      * get the Tile which at tiles[x + y * ROW ]
      */
     Tile tileAt(int x, int y) {
         return tiles[x + y * ROW];
     }
-    /*
+
+    /**
      * Generate a new Tile in the availableSpace.
      */
     void addTile() {
@@ -52,14 +57,15 @@ public class Board extends JPanel {
         Tile ranEmptyTile = list.get(index);
         ranEmptyTile.setVal(Value.of(randomInt()));
     }
-    /*
+
+    /**
      * Generate a integer 2 or 4, bigger chances return 2
      */
     private int randomInt() {
         return Math.random() < 0.15 ? 4 : 2;
     }
 
-    /*
+    /**
      * Query the field tiles Array, and get the list of
      * empty tile.
      */
@@ -72,12 +78,17 @@ public class Board extends JPanel {
         }
         return list;
     }
-    /*
+
+    /**
      * return true if the board doesn't have empty tile
      */
     private boolean isFull() {
         return availableSpace().size() == 0;
     }
+
+    /**
+     * return true if didn't lose
+     */
     boolean canMove() {
         if (!isFull()) {
             return true;
@@ -94,6 +105,7 @@ public class Board extends JPanel {
         }
         return false;
     }
+
     public void moveLeft() {
         boolean needAddTile = false;
         for (int i : _0123) {
@@ -111,13 +123,32 @@ public class Board extends JPanel {
                 needAddTile = true;
             }
         }
-        
+
         // if addTile is false, those line didn't change
         // then no need to add tile
         if (needAddTile) {
             addTile();
         }
     }
+
+    public void moveRight() {
+        rotate();
+        moveLeft();
+        rotate();
+    }
+
+    public void moveUp() {
+        antiClockRotate();
+        moveLeft();
+        clockRotate();
+    }
+
+    public void moveDown() {
+        clockRotate();
+        moveLeft();
+        antiClockRotate();
+    }
+
     /**
      * Compare two tile line, to see if they have same tile.
      */
@@ -127,29 +158,12 @@ public class Board extends JPanel {
         } else if (line1.length != line2.length) {
             return false;
         }
-        
+
         for (int i = 0; i < line1.length; i++) {
             if (!line1[i].equals(line2[i]))
                 return false;
         }
         return true;
-    }
-
-    public void moveRight() {
-        rotate();
-        moveLeft();
-        rotate();
-    }
-    
-    public void moveUp() {
-        antiClockRotate();
-        moveLeft();
-        clockRotate();
-    }
-    public void moveDown() {
-        clockRotate();
-        moveLeft();
-        antiClockRotate();
     }
 
     /**
@@ -164,6 +178,7 @@ public class Board extends JPanel {
         }
         tiles = newTile;
     }
+
     /**
      * rotate the tiles board clockwise
      */
@@ -176,6 +191,7 @@ public class Board extends JPanel {
         }
         tiles = newTile;
     }
+
     /**
      * rotate the tiles board anti-clockwise
      */
@@ -188,6 +204,7 @@ public class Board extends JPanel {
         }
         tiles = newTile;
     }
+
     /**
      * move the not empty tile in idx-th line to left
      */
@@ -210,7 +227,7 @@ public class Board extends JPanel {
         }
     }
 
-    /*
+    /**
      * Merge the oldLine of Tiles, then return a newLine
      */
     private Tile[] mergeLine(Tile[] oldLine) {
@@ -235,7 +252,8 @@ public class Board extends JPanel {
             return list.toArray(new Tile[4]);
         }
     }
-    /*
+
+    /**
      * Append the empty tile to the l list of tiles, ensure
      * it's size is s.
      */
@@ -245,7 +263,7 @@ public class Board extends JPanel {
         }
     }
 
-    /*
+    /**
      * get the idx-th line.
      */
     private Tile[] getLine(int idx) {
@@ -255,7 +273,8 @@ public class Board extends JPanel {
         }
         return result;
     }
-    /*
+
+    /**
      * set the idx-th line. replace by the re array.
      */
     private void setLine(int idx, Tile[] re) {
@@ -263,10 +282,13 @@ public class Board extends JPanel {
             tiles[i + idx * ROW] = re[i];
         }
     }
+
     /* Background color */
     private static final Color BG_COLOR = new Color(0xbbada0);
+
     /* Font */
     private static final Font STR_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 16);
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -279,8 +301,10 @@ public class Board extends JPanel {
             }
         }
     }
+
     /* Side of the tile square */
     private static final int SIDE = 64;
+
     /* Margin between tiles */
     private static final int MARGIN = 16;
 

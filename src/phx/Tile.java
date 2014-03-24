@@ -12,18 +12,23 @@ public class Tile {
     public Tile(int num) {
         this(Value.of(num));
     }
+
     public Value getVal() {
         return val;
     }
+
     public void setVal(Value val) {
         this.val = val;
     }
 
-    /* test the tile is empty or not. empty means it's val field
-      is Value._0. */
+    /**
+     *  test the tile is empty or not.
+     *  empty means it's val field is Value._0.
+     */
     public boolean empty() {
         return val == Value._0;
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -31,6 +36,7 @@ public class Tile {
         result = prime * result + ((val == null) ? 0 : val.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
