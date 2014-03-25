@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- * @author phoenix
+ * @author  Phoenix
  * @version 0.1.0
  */
 public class GUI2048 extends JFrame {

@@ -9,18 +9,18 @@ import java.awt.Color;
  *
  */
 public enum Value {
-    _0(0,       0x776e65,0xcdc0b4),
-    _2(2,       0x776e65,0xeee4da),
-    _4(4,       0x776e65,0xede0c8),
-    _8(8,       0xf9f6f2,0xf2b179),
-    _16(16,     0xf9f6f2,0xf59563),
-    _32(32,     0xf9f6f2,0xf67c5f),
-    _64(64,     0xf9f6f2,0xf65e3b),
-    _128(128,   0xf9f6f2,0xedcf72),
-    _256(256,   0xf9f6f2,0xedcc61),
-    _512(512,   0xf9f6f2,0xedc850),
-    _1024(1024, 0xf9f6f2,0xedc53f),
-    _2048(2048, 0xf9f6f2,0xedc22e);
+    _0(0,       0x776e65, 0xcdc0b4),
+    _2(2,       0x776e65, 0xeee4da),
+    _4(4,       0x776e65, 0xede0c8),
+    _8(8,       0xf9f6f2, 0xf2b179),
+    _16(16,     0xf9f6f2, 0xf59563),
+    _32(32,     0xf9f6f2, 0xf67c5f),
+    _64(64,     0xf9f6f2, 0xf65e3b),
+    _128(128,   0xf9f6f2, 0xedcf72),
+    _256(256,   0xf9f6f2, 0xedcc61),
+    _512(512,   0xf9f6f2, 0xedc850),
+    _1024(1024, 0xf9f6f2, 0xedc53f),
+    _2048(2048, 0xf9f6f2, 0xedc22e);
 
     private final int num;
 
@@ -48,7 +48,7 @@ public enum Value {
 
     /**
      * Check num is a legal value or not
-     * num should be 0, 2, 4, 8....
+     * num should be 0, 2, 4, 8...., ie 1B, 10B, 100B 1000B
      */
     private static boolean numIsLegal(int num) {
         return (num & (num-1)) == 0 || num == 0;

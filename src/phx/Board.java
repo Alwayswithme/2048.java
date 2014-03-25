@@ -12,9 +12,8 @@ public class Board extends JPanel {
     private static final long serialVersionUID = -1790261785521495991L;
     /* Board row and column */
     public static final int ROW = 4;
-    /* Two array use for convenience iterate */
+    /* this array use for convenience iterate */
     public static final int[] _0123 = {0, 1, 2, 3};
-    public static final int[] _3210 = {3, 2, 1, 0};
 
     GUI2048 host;
 
@@ -32,6 +31,9 @@ public class Board extends JPanel {
         initTiles();
     }
 
+    /**
+     * initialize the game, also use to start a new game
+     */
     public void initTiles() {
         tiles = new Tile[ROW * ROW];
         for (int i = 0; i < tiles.length; i++) {
@@ -51,7 +53,7 @@ public class Board extends JPanel {
     /**
      * Generate a new Tile in the availableSpace.
      */
-    void addTile() {
+    private void addTile() {
         List<Tile> list = availableSpace();
         int index = (int)(Math.random() * list.size()) % list.size();
         Tile ranEmptyTile = list.get(index);
@@ -106,7 +108,10 @@ public class Board extends JPanel {
         return false;
     }
 
-    public void moveLeft() {
+    /**
+     * move all the tiles to the left side.
+     */
+    public void left() {
         boolean needAddTile = false;
         for (int i : _0123) {
             // get i-th line
@@ -131,22 +136,31 @@ public class Board extends JPanel {
         }
     }
 
-    public void moveRight() {
-        rotate();
-        moveLeft();
-        rotate();
+    /**
+     * move tiles to the right side.
+     */
+    public void right() {
+        tiles = rotate(180);
+        left();
+        tiles = rotate(180);
     }
 
-    public void moveUp() {
-        antiClockRotate();
-        moveLeft();
-        clockRotate();
+    /**
+     * move tiles up.
+     */
+    public void up() {
+        tiles = rotate(270);
+        left();
+        tiles = rotate(90);
     }
 
-    public void moveDown() {
-        clockRotate();
-        moveLeft();
-        antiClockRotate();
+    /**
+     * move tiles down.
+     */
+    public void down() {
+        tiles = rotate(90);
+        left();
+        tiles = rotate(270);
     }
 
     /**
@@ -167,42 +181,31 @@ public class Board extends JPanel {
     }
 
     /**
-     * rotate the tiles 180 degree.
+     * rotate the tiles dgr degree, clockwise.
+     * @return  Tile[], the tiles after rotate.
      */
-    private void rotate() {
-        Tile[] newTile = new Tile[ROW * ROW];
+    private Tile[] rotate(int dgr) {
+        Tile[] newTiles = new Tile[ROW * ROW];
+        int offsetX = 3, offsetY = 3;
+        if (dgr == 90) {
+            offsetY = 0;
+        } else if (dgr == 180) {
+        } else if (dgr == 270) {
+            offsetX = 0;
+        } else {
+            throw new IllegalArgumentException("Only can rotate 90, 180, 270 degree");
+        }
+        double radians = Math.toRadians(dgr);
+        int cos = (int) Math.cos(radians);
+        int sin = (int) Math.sin(radians);
         for (int x : _0123) {
             for (int y : _0123) {
-                newTile[(3 - x) + (3 - y) * ROW] = tileAt(x, y);
+                int newX = (x * cos) - (y * sin) + offsetX;
+                int newY = (x * sin) + (y * cos) + offsetY;
+                newTiles[(newX) + (newY) * ROW] = tileAt(x, y);
             }
         }
-        tiles = newTile;
-    }
-
-    /**
-     * rotate the tiles board clockwise
-     */
-    private void clockRotate() {
-        Tile[] newTile = new Tile[ROW * ROW];
-        for (int x : _0123) {
-            for (int y : _0123) {
-                newTile[(3 - y) + x * ROW] = tileAt(x, y);
-            }
-        }
-        tiles = newTile;
-    }
-
-    /**
-     * rotate the tiles board anti-clockwise
-     */
-    private void antiClockRotate() {
-        Tile[] newTile = new Tile[ROW * ROW];
-        for (int x : _0123) {
-            for (int y : _0123) {
-                newTile[y + (3 - x) * ROW] = tileAt(x, y);
-            }
-        }
-        tiles = newTile;
+        return newTiles;
     }
 
     /**
@@ -257,7 +260,7 @@ public class Board extends JPanel {
      * Append the empty tile to the l list of tiles, ensure
      * it's size is s.
      */
-    void ensureSize(List<Tile> l, int s) {
+    private void ensureSize(List<Tile> l, int s) {
         while (l.size() != s) {
             l.add(new Tile());
         }
@@ -287,7 +290,7 @@ public class Board extends JPanel {
     private static final Color BG_COLOR = new Color(0xbbada0);
 
     /* Font */
-    private static final Font STR_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 16);
+    private static final Font STR_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 17);
 
     @Override
     public void paint(Graphics g) {
@@ -310,21 +313,20 @@ public class Board extends JPanel {
 
     /**
      * Draw a tile use specific number and color
-     * in (x, y) coords, x and y need expand.
+     * in (x, y) coords, x and y need offset a bit.
      */
     private void drawTile(Graphics g, Tile tile, int x, int y) {
-        // TODO too many hard code
         Value val = tile.getVal();
-        int newX = expandCoordinate(x);
-        int newY = expandCoordinate(y);
+        int xOffset = offsetCoors(x);
+        int yOffset = offsetCoors(y);
         g.setColor(val.color());
-        g.fillRect(newX, newY, SIDE, SIDE);
+        g.fillRect(xOffset, yOffset, SIDE, SIDE);
         g.setColor(val.fontColor());
         if (val.num() != 0)
-            g.drawString(String.format("%1$4s", val.num()), newX + 14, newY + 36);
+            g.drawString(String.format("%1$4s", val.num()), xOffset + 10, yOffset + 40);
     }
 
-    private int expandCoordinate(int arg) {
+    private int offsetCoors(int arg) {
         return arg * (MARGIN + SIDE) + MARGIN;
     }
 

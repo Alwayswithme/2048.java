@@ -24,7 +24,7 @@ public class KeySetting extends KeyAdapter {
 
     private static Integer[] VI_KEY = { VK_K, VK_J, VK_H, VK_L };
 
-    private static String[] methodName = { "moveUp", "moveDown", "moveLeft", "moveRight", "initTiles" };
+    private static String[] methodName = { "up", "down", "left", "right", "initTiles" };
 
     private final Board board;
 
