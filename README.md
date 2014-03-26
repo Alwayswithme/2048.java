@@ -16,6 +16,9 @@ some ideas behind the game.
 ### Requirements ###
 
 * OpenJDK-7 or newer to compile and run
+> cd 2048.java; mkdir bin
+> javac -d bin src/phx/*
+> java -cp bin phx.GUI2048
 
 
 ### HOWTO play ###
