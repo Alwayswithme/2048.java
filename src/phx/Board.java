@@ -44,9 +44,64 @@ public class Board extends JPanel {
     }
 
     /**
+     * move all the tiles to the left side.
+     */
+    public void left() {
+        boolean needAddTile = false;
+        for (int i : _0123) {
+            // get i-th line
+            Tile[] origin = getLine(i);
+            // get the line have been moved to left
+            Tile[] afterMove = moveLine(origin);
+            // get the the line after
+            Tile[] merged = mergeLine(afterMove);
+            // set i-th line with the merged line
+            setLine(i, merged);
+            if (!needAddTile && !cmpLine(origin, merged)) {
+                // if origin and merged line is different
+                // need to add a new Tile in the board
+                needAddTile = true;
+            }
+        }
+
+        // if addTile is false, those line didn't change
+        // then no need to add tile
+        if (needAddTile) {
+            addTile();
+        }
+    }
+
+    /**
+     * move tiles to the right side.
+     */
+    public void right() {
+        tiles = rotate(180);
+        left();
+        tiles = rotate(180);
+    }
+
+    /**
+     * move tiles up.
+     */
+    public void up() {
+        tiles = rotate(270);
+        left();
+        tiles = rotate(90);
+    }
+
+    /**
+     * move tiles down.
+     */
+    public void down() {
+        tiles = rotate(90);
+        left();
+        tiles = rotate(270);
+    }
+
+    /**
      * get the Tile which at tiles[x + y * ROW ]
      */
-    Tile tileAt(int x, int y) {
+    private Tile tileAt(int x, int y) {
         return tiles[x + y * ROW];
     }
 
@@ -109,62 +164,7 @@ public class Board extends JPanel {
     }
 
     /**
-     * move all the tiles to the left side.
-     */
-    public void left() {
-        boolean needAddTile = false;
-        for (int i : _0123) {
-            // get i-th line
-            Tile[] origin = getLine(i);
-            // get the line have been moved to left
-            Tile[] afterMove = moveLine(origin);
-            // get the the line after
-            Tile[] merged = mergeLine(afterMove);
-            // set i-th line with the merged line
-            setLine(i, merged);
-            if (!needAddTile && !cmpLine(origin, merged)) {
-                // if origin and merged line is different
-                // need to add a new Tile in the board
-                needAddTile = true;
-            }
-        }
-
-        // if addTile is false, those line didn't change
-        // then no need to add tile
-        if (needAddTile) {
-            addTile();
-        }
-    }
-
-    /**
-     * move tiles to the right side.
-     */
-    public void right() {
-        tiles = rotate(180);
-        left();
-        tiles = rotate(180);
-    }
-
-    /**
-     * move tiles up.
-     */
-    public void up() {
-        tiles = rotate(270);
-        left();
-        tiles = rotate(90);
-    }
-
-    /**
-     * move tiles down.
-     */
-    public void down() {
-        tiles = rotate(90);
-        left();
-        tiles = rotate(270);
-    }
-
-    /**
-     * Compare two tile line, to see if they have same tile.
+     * Compare two tile line, return true if they have same tile.
      */
     private boolean cmpLine(Tile[] line1, Tile[] line2) {
         if (line1 == line2) {
@@ -209,9 +209,9 @@ public class Board extends JPanel {
     }
 
     /**
-     * move the not empty tile in idx-th line to left
+     * move the not empty tile line to left
      */
-    Tile[] moveLine(Tile[] oldLine) {
+    private Tile[] moveLine(Tile[] oldLine) {
         LinkedList<Tile> l = new LinkedList<>();
         for (int i : _0123) {
             if (!oldLine[i].empty())
@@ -260,7 +260,7 @@ public class Board extends JPanel {
      * Append the empty tile to the l list of tiles, ensure
      * it's size is s.
      */
-    private void ensureSize(List<Tile> l, int s) {
+    private static void ensureSize(List<Tile> l, int s) {
         while (l.size() != s) {
             l.add(new Tile());
         }
@@ -326,7 +326,7 @@ public class Board extends JPanel {
             g.drawString(String.format("%1$4s", val.num()), xOffset + 10, yOffset + 40);
     }
 
-    private int offsetCoors(int arg) {
+    private static int offsetCoors(int arg) {
         return arg * (MARGIN + SIDE) + MARGIN;
     }
 

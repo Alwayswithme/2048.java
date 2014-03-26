@@ -51,15 +51,17 @@ public class KeySetting extends KeyAdapter {
      * Use reflect to invoke the mapping method.
      */
     @Override
-    public void keyPressed(KeyEvent e) {
-        super.keyPressed(e);
-        Method action = keyMapping.get(e.getKeyCode());
+    public void keyPressed(KeyEvent k) {
+        super.keyPressed(k);
+        Method action = keyMapping.get(k.getKeyCode());
+        if (action == null)
+            return;
         try {
             action.invoke(board);
             board.repaint();
-        } catch (IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e1) {
-            e1.printStackTrace();
+        } catch (InvocationTargetException | IllegalAccessException
+                | IllegalArgumentException e) {
+            e.printStackTrace();
         }
         if (!board.canMove()) {  // can not move, game over
             board.host.lose();

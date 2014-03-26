@@ -17,9 +17,9 @@ public class GUI2048 extends JFrame {
 
     private static final String TITLE = "2048 in Java";
 
-    private static final String WIN_MSG = "You already win, but you can continue";
+    public static final String WIN_MSG = "You already win, but you can continue";
 
-    private static final String LOSE_MSG = "You lose, press 'r' to try again!";
+    public static final String LOSE_MSG = "You lose, press 'r' to try again!";
 
     public static void main(String[] args) {
 

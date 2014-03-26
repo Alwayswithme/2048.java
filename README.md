@@ -3,7 +3,7 @@ a simple implement of [2048] using java.
 there is the online version, [Play it here!](http://gabrielecirulli.github.io/2048/)
 [2048]: https://github.com/gabrielecirulli/2048/
 
-### Development
+### Development ###
 
 some ideas behind the game.
 
@@ -13,12 +13,17 @@ some ideas behind the game.
 * The movements to different side is using rotate to do so.
 
 
-### Requirements
+### Requirements ###
 
 * OpenJDK-7 or newer to compile and run
 
 
-### HOWTO play
+### HOWTO play ###
 
-* use arrow keys to move the tiles.
-* a vi-like key-bind also OK :)
+1. use arrow keys to move the tiles.
+2. a vi-like keybindind also OK :)
+3. press 'r' to start new game.
+
+### BUGS ###
+
+* Didn't implements score
