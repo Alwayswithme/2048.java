@@ -9,8 +9,8 @@ some ideas behind the game.
 
 * Tiles are drawn by java.awt.Graphics.
 * Single dimensional arrays to simulate coordinate system. tiles[x + y * 4] get the tile in (x, y)
-* A movements just move all the tile to one side, then merge it ASAP.
-* The movements to different side is using rotate to do so.
+* A movements just move all the tile to one direction, then merge it ASAP.
+* The movements to different direction is using rotate to do so.
 
 
 ### Requirements ###

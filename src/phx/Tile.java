@@ -50,6 +50,4 @@ public class Tile {
             return false;
         return true;
     }
-
-
 }
