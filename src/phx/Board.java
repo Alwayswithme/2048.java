@@ -41,6 +41,7 @@ public class Board extends JPanel {
         }
         addTile();
         addTile();
+        host.statusBar.setText("");
     }
 
     /**
@@ -64,7 +65,7 @@ public class Board extends JPanel {
             }
         }
 
-        // if addTile is false, those line didn't change
+        // if needAddTile is false, those line didn't change
         // then no need to add tile
         if (needAddTile) {
             addTile();
@@ -235,25 +236,23 @@ public class Board extends JPanel {
      */
     private Tile[] mergeLine(Tile[] oldLine) {
         LinkedList<Tile> list = new LinkedList<Tile>();
-        for (int i = 0; i < ROW && !oldLine[i].empty(); i++) {
-            int num = oldLine[i].getVal().num();
-            if (i < 3 && oldLine[i].equals(oldLine[i+1])) {
-                // can be merge, double the val and delete next one!
-                num *= 2;
+        for (int i = 0; i < ROW; i++) {
+            if (i < ROW - 1 && !oldLine[i].empty()
+                    && oldLine[i].equals(oldLine[i+1])) {
+                // can be merge, double the val
+                int num = oldLine[i].getVal().score() * 2;
                 if (Value.of(num) == GOAL) {
                     // reach goal, show message
                     host.win();
                 }
-                i++;
+                i++;    // skip next one!
+                list.add(new Tile(num));
+            } else {
+                list.add(oldLine[i]);
             }
-            list.add(new Tile(num));
         }
-        if (list.size() == 0) {  // nothing change
-            return oldLine;
-        } else {
-            ensureSize(list, 4);
-            return list.toArray(new Tile[4]);
-        }
+        ensureSize(list, 4);
+        return list.toArray(new Tile[4]);
     }
 
     /**
@@ -261,7 +260,7 @@ public class Board extends JPanel {
      * it's size is s.
      */
     private static void ensureSize(List<Tile> l, int s) {
-        while (l.size() != s) {
+        while (l.size() < s) {
             l.add(new Tile());
         }
     }
@@ -322,8 +321,8 @@ public class Board extends JPanel {
         g.setColor(val.color());
         g.fillRect(xOffset, yOffset, SIDE, SIDE);
         g.setColor(val.fontColor());
-        if (val.num() != 0)
-            g.drawString(String.format("%1$4s", val.num()), xOffset + 10, yOffset + 40);
+        if (val.score() != 0)
+            g.drawString(String.format("%1$4s", val.score()), xOffset + 10, yOffset + 40);
     }
 
     private static int offsetCoors(int arg) {

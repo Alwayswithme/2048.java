@@ -22,36 +22,24 @@ public enum Value {
     _1024(1024, 0xf9f6f2, 0xedc53f),
     _2048(2048, 0xf9f6f2, 0xedc22e);
 
-    private final int num;
+    private final int score;
 
     private final Color color;
 
     private final Color fontColor;
 
     Value(int n, int f, int c) {
-        num = n;
+        score = n;
         color = new Color(c);
         fontColor = new Color(f);
     }
 
     /**
-     * Factory method to get one of these enum.
-     * This is a wrapper of valueOf().
+     * Factory method to get one of these enum instance.
+     * This is a wrapper of Enum.valueOf().
      */
     static Value of(int num) {
-        if (numIsLegal(num)) {
-            return Value.valueOf("_" + num);
-        } else {
-            throw new IllegalArgumentException("can not use this value : "+ num);
-        }
-    }
-
-    /**
-     * Check num is a legal value or not
-     * num should be 0, 2, 4, 8...., ie 1B, 10B, 100B 1000B
-     */
-    private static boolean numIsLegal(int num) {
-        return (num & (num-1)) == 0 || num == 0;
+        return Value.valueOf("_" + num);
     }
 
     public Color fontColor() {
@@ -62,7 +50,7 @@ public enum Value {
         return color;
     }
 
-    public int num() {
-        return num;
+    public int score() {
+        return score;
     }
 }

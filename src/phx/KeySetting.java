@@ -26,10 +26,17 @@ public class KeySetting extends KeyAdapter {
 
     private static String[] methodName = { "up", "down", "left", "right", "initTiles" };
 
-    private final Board board;
+    private static Board board;
 
-    public KeySetting(Board b) {
+    private static final KeySetting INSTANCE = new KeySetting();
+    
+    public static KeySetting getkeySetting(Board b) {
         board = b;
+        return INSTANCE;
+    }
+
+    // Singleton
+    private KeySetting() {
         initKey(KEYS);
         initKey(VI_KEY);
     }
@@ -40,7 +47,7 @@ public class KeySetting extends KeyAdapter {
     void initKey(Integer[] kcs) {
         for (int i = 0; i < kcs.length; i++) {
             try {
-                keyMapping.put(kcs[i], board.getClass().getMethod(methodName[i]));
+                keyMapping.put(kcs[i], Board.class.getMethod(methodName[i]));
             } catch (NoSuchMethodException | SecurityException e) {
                 e.printStackTrace();
             }
@@ -54,8 +61,10 @@ public class KeySetting extends KeyAdapter {
     public void keyPressed(KeyEvent k) {
         super.keyPressed(k);
         Method action = keyMapping.get(k.getKeyCode());
-        if (action == null)
+        if (action == null) {
+            System.gc();
             return;
+        }
         try {
             action.invoke(board);
             board.repaint();

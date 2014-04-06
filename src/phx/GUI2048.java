@@ -28,7 +28,7 @@ public class GUI2048 extends JFrame {
         if (args.length != 0 && args[0].matches("[0-9]*")) {
             board.setGOAL(Integer.parseInt(args[0]));
         }
-        KeySetting kb = new KeySetting(board);
+        KeySetting kb = KeySetting.getkeySetting(board);
         board.addKeyListener(kb);
         game.add(board);
         
