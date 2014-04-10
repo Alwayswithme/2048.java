@@ -13,7 +13,7 @@ public class Board extends JPanel {
     /* Board row and column */
     public static final int ROW = 4;
     /* this array use for convenience iterate */
-    public static final int[] _0123 = {0, 1, 2, 3};
+    public static final int[] _0123 = { 0, 1, 2, 3 };
 
     GUI2048 host;
 
@@ -111,14 +111,13 @@ public class Board extends JPanel {
      */
     private void addTile() {
         List<Integer> list = availableIndex();
-        int idx = list.get((int)(Math.random() * list.size()));
+        int idx = list.get((int) (Math.random() * list.size()));
         tiles[idx] = Tile.randomTile();
     }
 
     /**
-     * Query the tiles Array field, and get the list of
-     * empty tile's index. aka find the index is ok to
-     * add a new Tile.
+     * Query the tiles Array field, and get the list of empty tile's index. aka
+     * find the index is ok to add a new Tile.
      */
     private List<Integer> availableIndex() {
         List<Integer> list = new LinkedList<>();
@@ -146,9 +145,8 @@ public class Board extends JPanel {
         for (int x : _0123) {
             for (int y : _0123) {
                 Tile t = tileAt(x, y);
-                if ( (x < ROW - 1 && t.equals(tileAt(x+1, y)))
-                   ||   (y < ROW - 1 && t.equals(tileAt(x, y + 1)))
-                   ) {
+                if ((x < ROW - 1 && t.equals(tileAt(x + 1, y)))
+                        || (y < ROW - 1 && t.equals(tileAt(x, y + 1)))) {
                     return true;
                 }
             }
@@ -175,7 +173,8 @@ public class Board extends JPanel {
 
     /**
      * rotate the tiles dgr degree, clockwise.
-     * @return  Tile[], the tiles after rotate.
+     * 
+     * @return Tile[], the tiles after rotate.
      */
     private Tile[] rotate(int dgr) {
         Tile[] newTiles = new Tile[ROW * ROW];
@@ -186,7 +185,8 @@ public class Board extends JPanel {
         } else if (dgr == 270) {
             offsetX = 0;
         } else {
-            throw new IllegalArgumentException("Only can rotate 90, 180, 270 degree");
+            throw new IllegalArgumentException(
+                    "Only can rotate 90, 180, 270 degree");
         }
         double radians = Math.toRadians(dgr);
         int cos = (int) Math.cos(radians);
@@ -230,10 +230,10 @@ public class Board extends JPanel {
         LinkedList<Tile> list = new LinkedList<Tile>();
         for (int i = 0; i < ROW; i++) {
             if (i < ROW - 1 && !oldLine[i].empty()
-                    && oldLine[i].equals(oldLine[i+1])) {
+                    && oldLine[i].equals(oldLine[i + 1])) {
                 // can be merge, double the val
                 Tile merged = oldLine[i].getDouble();
-                i++;    // skip next one!
+                i++; // skip next one!
                 list.add(merged);
                 if (merged.value() == GOAL) {
                     // reach goal, show message
@@ -248,8 +248,7 @@ public class Board extends JPanel {
     }
 
     /**
-     * Append the empty tile to the l list of tiles, ensure
-     * it's size is s.
+     * Append the empty tile to the l list of tiles, ensure it's size is s.
      */
     private static void ensureSize(List<Tile> l, int s) {
         while (l.size() < s) {
@@ -262,7 +261,7 @@ public class Board extends JPanel {
      */
     private Tile[] getLine(int idx) {
         Tile[] result = new Tile[4];
-        for(int i : _0123) {
+        for (int i : _0123) {
             result[i] = tileAt(i, idx);
         }
         return result;
@@ -281,7 +280,8 @@ public class Board extends JPanel {
     private static final Color BG_COLOR = new Color(0xbbada0);
 
     /* Font */
-    private static final Font STR_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 17);
+    private static final Font STR_FONT = new Font(Font.SANS_SERIF, 
+                                                    Font.BOLD, 17);
 
     @Override
     public void paint(Graphics g) {
@@ -303,8 +303,8 @@ public class Board extends JPanel {
     private static final int MARGIN = 16;
 
     /**
-     * Draw a tile use specific number and color
-     * in (x, y) coords, x and y need offset a bit.
+     * Draw a tile use specific number and color in (x, y) coords, x and y need
+     * offset a bit.
      */
     private void drawTile(Graphics g, Tile tile, int x, int y) {
         Value val = tile.value();
@@ -314,8 +314,8 @@ public class Board extends JPanel {
         g.fillRect(xOffset, yOffset, SIDE, SIDE);
         g.setColor(val.fontColor());
         if (val.score() != 0)
-            g.drawString(String.format("%1$s", val.score()),
-                    xOffset + (SIDE >> 1) - MARGIN, yOffset + (SIDE >> 1));
+            g.drawString(String.format("%1$s", val.score()), xOffset
+                    + (SIDE >> 1) - MARGIN, yOffset + (SIDE >> 1));
     }
 
     private static int offsetCoors(int arg) {

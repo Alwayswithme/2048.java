@@ -3,10 +3,13 @@ package phx;
 import static phx.Value._0;
 import static phx.Value._2;
 import static phx.Value._4;
-import static phx.Value._8;
+
+import java.util.HashMap;
 
 public class Tile {
     private final Value val;
+
+    private final static HashMap<Integer, Tile> cache = new HashMap<>();
 
     /**
      * Frequently used tile, reuse these whenever possible
@@ -14,7 +17,25 @@ public class Tile {
     public final static Tile ZERO = new Tile(_0);
     public final static Tile TWO = new Tile(_2);
     public final static Tile FOUR = new Tile(_4);
-    public final static Tile EIGHT = new Tile(_8);
+
+    static {
+        for (Value v : Value.values()) {
+            switch (v) {
+            case _0:
+                cache.put(v.score(), ZERO);
+                break;
+            case _2:
+                cache.put(v.score(), TWO);
+                break;
+            case _4:
+                cache.put(v.score(), FOUR);
+                break;
+            default:
+                cache.put(v.score(), new Tile(v));
+                break;
+            }
+        }
+    }
 
     public Tile(Value v) {
         val = v;
@@ -24,13 +45,7 @@ public class Tile {
      * factory method to get Tile instance
      */
     public static Tile valueOf(int num) {
-        switch(num) {
-        case 0 : return ZERO;
-        case 2 : return TWO;
-        case 4 : return FOUR;
-        case 8 : return EIGHT;
-        default : return new Tile(Value.of(num));
-        }
+        return cache.get(num);
     }
 
     Value value() {
@@ -39,6 +54,7 @@ public class Tile {
 
     /**
      * Use for merge, double the score
+     * 
      * @return a new Tile which's val multiply 2
      */
     public Tile getDouble() {
@@ -56,6 +72,7 @@ public class Tile {
     public String toString() {
         return val.score() + "";
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
