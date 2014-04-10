@@ -1,28 +1,36 @@
 package phx;
 
 import static phx.Value._0;
+import static phx.Value._2;
+import static phx.Value._4;
 
 public class Tile {
-    private Value val;
+    private final Value val;
 
-    public Tile() {
-        val = _0;
-    }
+    public final static Tile ZERO = new Tile(_0);
+
+    public final static Tile TWO = new Tile(_2);
+
+    public final static Tile FOUR = new Tile(_4);
 
     public Tile(Value v) {
         val = v;
     }
 
-    public Tile(int num) {
-        this(Value.of(num));
+    /*
+     * factory method to get Tile instance
+     */
+    public static Tile valueOf(int num) {
+        switch(num) {
+        case 0 : return ZERO;
+        case 2 : return TWO;
+        case 4 : return FOUR;
+        default : return new Tile(Value.of(num));
+        }
     }
 
     public Value getVal() {
         return val;
-    }
-
-    public void setVal(Value val) {
-        this.val = val;
     }
 
     /**

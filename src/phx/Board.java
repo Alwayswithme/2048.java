@@ -37,7 +37,7 @@ public class Board extends JPanel {
     public void initTiles() {
         tiles = new Tile[ROW * ROW];
         for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = new Tile();
+            tiles[i] = Tile.ZERO;
         }
         addTile();
         addTile();
@@ -112,15 +112,15 @@ public class Board extends JPanel {
     private void addTile() {
         List<Tile> list = availableSpace();
         int index = (int)(Math.random() * list.size()) % list.size();
-        Tile ranEmptyTile = list.get(index);
-        ranEmptyTile.setVal(Value.of(randomInt()));
+        list.set(index, randomTile());
+        tiles = list.toArray(new Tile[16]);
     }
 
     /**
-     * Generate a integer 2 or 4, bigger chances return 2
+     * Generate a Tile which's val is 2 or 4, bigger chances return 2
      */
-    private int randomInt() {
-        return Math.random() < 0.15 ? 4 : 2;
+    private Tile randomTile() {
+        return Math.random() < 0.15 ? Tile.FOUR : Tile.TWO;
     }
 
     /**
@@ -246,7 +246,7 @@ public class Board extends JPanel {
                     host.win();
                 }
                 i++;    // skip next one!
-                list.add(new Tile(num));
+                list.add(Tile.valueOf(num));
             } else {
                 list.add(oldLine[i]);
             }
@@ -261,7 +261,7 @@ public class Board extends JPanel {
      */
     private static void ensureSize(List<Tile> l, int s) {
         while (l.size() < s) {
-            l.add(new Tile());
+            l.add(Tile.ZERO);
         }
     }
 
