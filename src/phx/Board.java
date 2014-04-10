@@ -110,29 +110,21 @@ public class Board extends JPanel {
      * Generate a new Tile in the availableSpace.
      */
     private void addTile() {
-        List<Tile> list = availableSpace();
-        int index = (int)(Math.random() * list.size()) % list.size();
-        list.set(index, randomTile());
-        tiles = list.toArray(new Tile[16]);
+        List<Integer> list = availableIndex();
+        int idx = list.get((int)(Math.random() * list.size()));
+        tiles[idx] = Tile.randomTile();
     }
 
     /**
-     * Generate a Tile which's val is 2 or 4, bigger chances return 2
+     * Query the tiles Array field, and get the list of
+     * empty tile's index. aka find the index is ok to
+     * add a new Tile.
      */
-    private Tile randomTile() {
-        return Math.random() < 0.15 ? Tile.FOUR : Tile.TWO;
-    }
-
-    /**
-     * Query the field tiles Array, and get the list of
-     * empty tile.
-     */
-    private List<Tile> availableSpace() {
-        List<Tile> list = new LinkedList<>();
-        for (Tile t : tiles) {
-            if (t.empty()) {
-                list.add(t);
-            }
+    private List<Integer> availableIndex() {
+        List<Integer> list = new LinkedList<>();
+        for (int i = 0; i < tiles.length; i++) {
+            if (tiles[i].empty())
+                list.add(i);
         }
         return list;
     }
@@ -141,7 +133,7 @@ public class Board extends JPanel {
      * return true if the board doesn't have empty tile
      */
     private boolean isFull() {
-        return availableSpace().size() == 0;
+        return availableIndex().size() == 0;
     }
 
     /**
@@ -174,7 +166,7 @@ public class Board extends JPanel {
             return false;
         }
 
-        for (int i = 0; i < line1.length; i++) {
+        for (int i = 0, n = line1.length; i < n; i++) {
             if (!line1[i].equals(line2[i]))
                 return false;
         }
@@ -240,13 +232,13 @@ public class Board extends JPanel {
             if (i < ROW - 1 && !oldLine[i].empty()
                     && oldLine[i].equals(oldLine[i+1])) {
                 // can be merge, double the val
-                int num = oldLine[i].getVal().score() * 2;
-                if (Value.of(num) == GOAL) {
+                Tile merged = oldLine[i].getDouble();
+                i++;    // skip next one!
+                list.add(merged);
+                if (merged.value() == GOAL) {
                     // reach goal, show message
                     host.win();
                 }
-                i++;    // skip next one!
-                list.add(Tile.valueOf(num));
             } else {
                 list.add(oldLine[i]);
             }
@@ -315,14 +307,15 @@ public class Board extends JPanel {
      * in (x, y) coords, x and y need offset a bit.
      */
     private void drawTile(Graphics g, Tile tile, int x, int y) {
-        Value val = tile.getVal();
+        Value val = tile.value();
         int xOffset = offsetCoors(x);
         int yOffset = offsetCoors(y);
         g.setColor(val.color());
         g.fillRect(xOffset, yOffset, SIDE, SIDE);
         g.setColor(val.fontColor());
         if (val.score() != 0)
-            g.drawString(String.format("%1$4s", val.score()), xOffset + 10, yOffset + 40);
+            g.drawString(String.format("%1$s", val.score()),
+                    xOffset + (SIDE >> 1) - MARGIN, yOffset + (SIDE >> 1));
     }
 
     private static int offsetCoors(int arg) {

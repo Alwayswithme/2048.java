@@ -3,15 +3,18 @@ package phx;
 import static phx.Value._0;
 import static phx.Value._2;
 import static phx.Value._4;
+import static phx.Value._8;
 
 public class Tile {
     private final Value val;
 
+    /**
+     * Frequently used tile, reuse these whenever possible
+     */
     public final static Tile ZERO = new Tile(_0);
-
     public final static Tile TWO = new Tile(_2);
-
     public final static Tile FOUR = new Tile(_4);
+    public final static Tile EIGHT = new Tile(_8);
 
     public Tile(Value v) {
         val = v;
@@ -25,18 +28,27 @@ public class Tile {
         case 0 : return ZERO;
         case 2 : return TWO;
         case 4 : return FOUR;
+        case 8 : return EIGHT;
         default : return new Tile(Value.of(num));
         }
     }
 
-    public Value getVal() {
+    Value value() {
         return val;
+    }
+
+    /**
+     * Use for merge, double the score
+     * @return a new Tile which's val multiply 2
+     */
+    public Tile getDouble() {
+        return valueOf(val.score() << 1);
     }
 
     /**
      * test the tile is empty or not. empty means it's val field is Value._0.
      */
-    public boolean empty() {
+    boolean empty() {
         return val == _0;
     }
 
@@ -64,5 +76,12 @@ public class Tile {
         if (val != other.val)
             return false;
         return true;
+    }
+
+    /**
+     * Generate a Tile which's val is 2 or 4, bigger chances return 2
+     */
+    static Tile randomTile() {
+        return Math.random() < 0.15 ? FOUR : TWO;
     }
 }
