@@ -16,15 +16,11 @@ public class Board extends JPanel {
     /* this array use for convenience iterate */
     public static final int[] _0123 = { 0, 1, 2, 3 };
 
-    GUI2048 host;
+    final GUI2048 host;
 
     private Tile[] tiles;
 
-    private static Value GOAL = Value._2048;
-
-    public void setGOAL(int num) {
-        GOAL = Value.of(num);
-    }
+    public static Value GOAL = Value._2048;
 
     public Board(GUI2048 f) {
         host = f;
