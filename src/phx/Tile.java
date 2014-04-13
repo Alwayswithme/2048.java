@@ -70,7 +70,8 @@ public class Tile {
 
     @Override
     public String toString() {
-        return val.score() + "";
+        return String.format("%1$4d", val.score());
+        
     }
 
     @Override
@@ -85,9 +86,7 @@ public class Tile {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Tile))
             return false;
         Tile other = (Tile) obj;
         if (val != other.val)

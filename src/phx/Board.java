@@ -3,6 +3,7 @@ package phx;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class Board extends JPanel {
             Tile[] merged = mergeLine(afterMove);
             // set i-th line with the merged line
             setLine(i, merged);
-            if (!needAddTile && !cmpLine(origin, merged)) {
+            if (!needAddTile && !Arrays.equals(origin, merged)) {
                 // if origin and merged line is different
                 // need to add a new Tile in the board
                 needAddTile = true;
@@ -155,25 +156,8 @@ public class Board extends JPanel {
     }
 
     /**
-     * Compare two tile line, return true if they have same tile.
-     */
-    private boolean cmpLine(Tile[] line1, Tile[] line2) {
-        if (line1 == line2) {
-            return true;
-        } else if (line1.length != line2.length) {
-            return false;
-        }
-
-        for (int i = 0, n = line1.length; i < n; i++) {
-            if (!line1[i].equals(line2[i]))
-                return false;
-        }
-        return true;
-    }
-
-    /**
      * rotate the tiles dgr degree, clockwise.
-     * 
+     *
      * @return Tile[], the tiles after rotate.
      */
     private Tile[] rotate(int dgr) {
@@ -280,7 +264,7 @@ public class Board extends JPanel {
     private static final Color BG_COLOR = new Color(0xbbada0);
 
     /* Font */
-    private static final Font STR_FONT = new Font(Font.SANS_SERIF, 
+    private static final Font STR_FONT = new Font(Font.SANS_SERIF,
                                                     Font.BOLD, 17);
 
     @Override
@@ -314,7 +298,7 @@ public class Board extends JPanel {
         g.fillRect(xOffset, yOffset, SIDE, SIDE);
         g.setColor(val.fontColor());
         if (val.score() != 0)
-            g.drawString(String.format("%1$s", val.score()), xOffset
+            g.drawString(tile.toString(), xOffset
                     + (SIDE >> 1) - MARGIN, yOffset + (SIDE >> 1));
     }
 

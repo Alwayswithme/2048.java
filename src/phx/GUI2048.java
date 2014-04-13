@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 /**
  * @author  Phoenix
- * @version 0.1.0
+ * @version 0.1.1
  */
 public class GUI2048 extends JFrame {
 
@@ -26,7 +26,7 @@ public class GUI2048 extends JFrame {
         GUI2048 game = new GUI2048();
         Board board = new Board(game);
         if (args.length != 0 && args[0].matches("[0-9]*")) {
-            board.setGOAL(Integer.parseInt(args[0]));
+            Board.GOAL = Value.of(Integer.parseInt(args[0]));
         }
         KeySetting kb = KeySetting.getkeySetting(board);
         board.addKeyListener(kb);
