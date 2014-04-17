@@ -54,7 +54,7 @@ public class Tile {
 
     /**
      * Use for merge, double the score
-     * 
+     *
      * @return a new Tile which's val multiply 2
      */
     public Tile getDouble() {
@@ -71,7 +71,6 @@ public class Tile {
     @Override
     public String toString() {
         return String.format("%1$4d", val.score());
-        
     }
 
     @Override
